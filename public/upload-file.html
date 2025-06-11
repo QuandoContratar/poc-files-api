@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Arquivos</title>
+</head>
+<body>
+    <input type="file" id="inputFile">
+    <button onclick="uploadFile()">
+        Upload
+    </button>
+</body>
+</html>
+<script>
+    const isProduction = true
+    const baseUrl = (isProduction ? 'http://<PRIVATE_BACKEND_IP>:3000' : 'http://localhost:3000') + '/files-api'
+
+    async function uploadFile() {
+        const input = document.getElementById("inputFile")
+        if (!input.files.length) {
+            console.log("Nenhum arquivo selecionado.")
+            return
+        }
+
+        const file = input.files[0]
+        const fileName = file.name
+        const mimeType = file.type
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("fileName", fileName);
+        formData.append("mimeType", mimeType);
+
+        console.log("Arquivo:", fileName)
+        console.log("MIME Type:", mimeType)
+
+        const response = await fetch(baseUrl + '/files', {
+            method: 'POST',
+            body: formData
+        })
+
+        const data = await response.json()
+        if (response.ok){
+            console.log('abc')
+        } else {
+            console.log(data)
+        }
+    }
+</script>

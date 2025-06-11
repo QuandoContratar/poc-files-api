@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+    <input type="email" placeholder="Digite seu email..." id="inputEmail">
+    <input type="password" placeholder="Digite sua senha..." id="inputPassword">
+    <button onclick="login()">
+        Login
+    </button>
+</body>
+
+</html>
+
+<script>
+    const isProduction = true
+    const baseUrl = (isProduction ? 'http://<PRIVATE_BACKEND_IP>:3000' : 'http://localhost:3000') + '/files-api'
+
+    async function login() {
+        const emailInput = document.getElementById('inputEmail')
+        const email = emailInput.value
+        const passwordInput = document.getElementById('inputPassword')
+        const password = passwordInput.value
+
+        const response = await fetch(baseUrl + '/people/login', {
+            method: 'POST',
+            body: JSON.stringify({
+                email,
+                password
+            })
+        })
+
+        const data = await response.json()
+        if (response.ok){
+            window.location = "./upload-file.html"
+            console.log('abc')
+        } else {
+            console.log(data)
+        }
+    }
+</script>
